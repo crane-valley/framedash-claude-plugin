@@ -1,0 +1,15 @@
+{
+	"$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+	"name": "framedash",
+	"displayName": "Framedash",
+	"version": "0.1.0",
+	"description": "Analyze your game telemetry with Claude Code. Bundles the Framedash MCP server (read-only analytics tools), a SQL query cookbook over the events schema, CLI usage patterns, and perf-diff CI recipes.",
+	"author": {
+		"name": "Crane Valley LLC",
+		"url": "https://framedash.dev"
+	},
+	"homepage": "https://docs.framedash.dev",
+	"repository": "https://github.com/crane-valley/framedash-claude-plugin",
+	"license": "MIT",
+	"keywords": ["framedash", "game-analytics", "telemetry", "clickhouse", "mcp", "perf-diff", "ci"]
+}

@@ -1,0 +1,18 @@
+{
+	"$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+	"name": "framedash",
+	"owner": {
+		"name": "Crane Valley LLC",
+		"email": "support@framedash.dev"
+	},
+	"description": "Framedash game-telemetry analytics for Claude Code.",
+	"plugins": [
+		{
+			"name": "framedash",
+			"source": "./",
+			"description": "Analyze your game telemetry with Claude Code: read-only MCP analytics tools, a SQL query cookbook, CLI usage patterns, and perf-diff CI recipes.",
+			"homepage": "https://docs.framedash.dev",
+			"license": "MIT"
+		}
+	]
+}

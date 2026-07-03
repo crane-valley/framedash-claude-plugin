@@ -1,0 +1,13 @@
+{
+	"mcpServers": {
+		"framedash": {
+			"command": "npx",
+			"args": ["-y", "@framedash/mcp-server"],
+			"env": {
+				"FRAMEDASH_API_KEY": "${FRAMEDASH_API_KEY}",
+				"FRAMEDASH_PROJECT_ID": "${FRAMEDASH_PROJECT_ID:-}",
+				"FRAMEDASH_BASE_URL": "${FRAMEDASH_BASE_URL:-https://app.framedash.dev}"
+			}
+		}
+	}
+}

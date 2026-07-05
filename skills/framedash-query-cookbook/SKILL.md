@@ -50,7 +50,7 @@ Columns you can select and filter on:
 
 | Column | Type | Notes |
 |--------|------|-------|
-| `event_name` | String | e.g. `player.death`, `level.start`, `perf_heartbeat` |
+| `event_name` | String | e.g. `player_death`, `level_start`, `perf_heartbeat` |
 | `timestamp` | DateTime64(6) | Event time (UTC) |
 | `session_id` | String | Play-session id |
 | `player_id` | String | Stable player/device id |
@@ -132,7 +132,7 @@ in the client):
 ```sql
 SELECT event_name, uniqExact(player_id) AS players
 FROM events
-WHERE event_name IN ('tutorial.start', 'level.start', 'level.complete', 'purchase')
+WHERE event_name IN ('tutorial_start', 'level_start', 'level_complete', 'purchase')
   AND timestamp >= today() - 7
 GROUP BY event_name
 ORDER BY players DESC

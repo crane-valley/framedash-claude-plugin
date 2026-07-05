@@ -13,6 +13,12 @@ bundles:
   formats, and safe API-key handling.
 - A **perf-CI** skill -- `run-profile-test` and `builds` + `perf-diff` recipes
   with a GitHub Actions example for build-over-build regression gating.
+- A **Unity integration** skill -- installing `com.framedash.sdk`, initializing
+  `TelemetrySDK`, the batchmode/PlayMode CI pattern, and verifying ingest.
+- A **UE5 integration** skill -- the C++ plugin install, headless null-RHI runs,
+  the authoritative `Saved/Logs` log, and the map-path/Git-Bash pitfalls.
+- A **Godot integration** skill -- the C# addon install, the headless
+  build-solutions fallback, the flush-then-wait pattern, and ingest verification.
 - A **`/framedash:setup`** command that walks you through configuration.
 
 ## Prerequisites

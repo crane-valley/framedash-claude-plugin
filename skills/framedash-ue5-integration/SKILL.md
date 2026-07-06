@@ -116,6 +116,13 @@ duplication bug:
 UnrealEditor-Cmd.exe <Project>.uproject <MapPath> -game -nullrhi -nosound -unattended -nosplash -stdout
 ```
 
+Do NOT background this run via a `cmd /c start`-style wrapper. That backgrounding
+can fail silently, leaving no process AND no `Saved/Logs` log file, so the run
+looks launched but nothing ran. Start `UnrealEditor-Cmd.exe` directly as a
+background process (for example, PowerShell's `Start-Process` or Bash's `&`
+operator) and confirm the process is actually alive before you poll
+`Saved/Logs`.
+
 Template map path differs by engine generation:
 
 | Engine | Third Person template map path |
@@ -168,7 +175,8 @@ Pre-existing data makes "data exists" meaningless. Emit a UNIQUE per-run marker
 event named `run_<unix_ts>_<random>` and confirm a row with that exact name
 landed today. `framedash query` needs a project id (`--project-id <id>` or
 `FRAMEDASH_PROJECT_ID`) and a key with the `data:admin` scope (an ingest
-`events:write` key cannot read):
+`events:write` key cannot read). If you do not know the project id, run
+`framedash projects list` to print each accessible project's id:
 
 ```bash
 framedash query --api-key-file full.key --project-id <project-uuid> \

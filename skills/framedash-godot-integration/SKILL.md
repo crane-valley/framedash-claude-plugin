@@ -23,7 +23,12 @@ Troubleshooting: https://docs.framedash.dev/en/sdk/troubleshooting/
 
 ## Install
 
-Clone the addon and copy it into your project:
+Clone the addon at a pinned release tag (substitute a newer tag as it ships) and
+copy it into your project:
+
+```bash
+git clone --branch v0.1.3 --depth 1 https://github.com/crane-valley/framedash-godot-sdk.git
+```
 
 1. Copy `Runtime/`, `FramedashEditorPlugin.cs`, and `plugin.cfg` into
    `res://addons/framedash/`. Do NOT copy `Tests/` (its NUnit deps break the game
@@ -158,7 +163,8 @@ Pre-existing data makes "data exists" meaningless. Use a UNIQUE per-run marker
 event named `run_<unix_ts>_<random>` and confirm a row with that exact name landed
 today. `framedash query` needs a project id (`--project-id <id>` or
 `FRAMEDASH_PROJECT_ID`) and a key with the `data:admin` scope (an ingest
-`events:write` key cannot read):
+`events:write` key cannot read). If you do not know the project id, run
+`framedash projects list` to print each accessible project's id:
 
 ```bash
 framedash query --api-key-file full.key --project-id <project-uuid> \

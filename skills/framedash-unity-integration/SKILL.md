@@ -35,6 +35,11 @@ Add the package as a git dependency. For CI or scripted installs, edit
 Pin a version tag (`#v0.1.2`) rather than tracking the default branch, so a CI
 build is reproducible.
 
+If a batch-mode run fails right after adding the git package with
+`Package Manager Cancelled resolving packages`, the cause is a stale
+`Temp/UnityLockfile` left over from project creation: a still-locked project
+cannot resolve the new package. Delete `Temp/UnityLockfile` and retry the run.
+
 ## Initialize
 
 Call `Initialize` once at startup from a persistent `MonoBehaviour`. The full
@@ -99,6 +104,24 @@ the 2xx line is.
 A bare `Unity.exe -batchmode -executeMethod ...` runs in Edit mode. Coroutines
 and `UnityWebRequest` do not advance there, so events are buffered but never sent.
 Drive the player loop with a PlayMode test (Unity Test Framework) instead.
+
+Put the PlayMode test in its own folder with a test assembly definition. The
+recommended layout is:
+
+```
+Assets/Tests/PlayMode/
+  Framedash.Tests.PlayMode.asmdef   # Editor-only; references Framedash.Runtime + the test runner
+  TelemetrySmokeTest.cs
+```
+
+The test `.asmdef` references `Framedash.Runtime` plus `UnityEngine.TestRunner`
+and `UnityEditor.TestRunner`, with `nunit.framework.dll` as a precompiled
+reference (set `overrideReferences` true). Gate it to the Editor with
+`"includePlatforms": ["Editor"]` -- the documented headless run is an in-Editor
+batch-mode PlayMode run, and the Editor gate keeps `UnityEditor.TestRunner`
+(an editor-only assembly) from breaking standalone player builds. That scopes
+the test to the test framework and lets `-testPlatform PlayMode` discover it.
+The test file:
 
 ```csharp
 using System.Collections;
@@ -187,7 +210,8 @@ event name, for example `run_<unix_ts>_<random>`, and check that a row with that
 exact name landed today. `framedash query` needs a project id
 (`--project-id <id>` or `FRAMEDASH_PROJECT_ID`) and a key with the `data:admin`
 scope (an ingest `events:write` key cannot read), following the query-cookbook
-skill:
+skill. If you do not know the project id, run `framedash projects list` to print
+each accessible project's id:
 
 ```bash
 framedash query --api-key-file full.key --project-id <project-uuid> \

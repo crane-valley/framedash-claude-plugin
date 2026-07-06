@@ -13,6 +13,7 @@ coding agent. Install with `npx -y @framedash/cli <command>` or a global install
 | Command | Purpose |
 |---------|---------|
 | `framedash auth` | Verify an API key (only needs the key, no project) |
+| `framedash projects list` | List accessible projects (id, name, createdAt) to discover a project id |
 | `framedash status` | Check project ingestion status |
 | `framedash dashboard` | Fetch dashboard KPI summary (DAU, MAU, sessions, events) |
 | `framedash retention` | Retention cohort data |
@@ -39,7 +40,12 @@ Run `framedash <command> --help` for per-command flags.
 
 `auth` only needs the API key. Project-scoped commands such as `dashboard`,
 `retention`, and `funnel` also need a project id from `--project-id` or
-`FRAMEDASH_PROJECT_ID`.
+`FRAMEDASH_PROJECT_ID`. `framedash projects list` is the first-class discovery command: it prints each
+accessible project's `id`, `name`, and `createdAt`. It requires a credential
+with `analytics:read` (an API key or an OAuth login) and needs no `--project-id`;
+an `events:write`-only ingest key cannot list projects. `framedash auth` also
+lists the projects a credential can read while validating that credential, so it
+is a fine alternative for discovering a project id.
 
 ### API-key scopes
 
@@ -84,7 +90,8 @@ framedash auth --api-key-file ./framedash.key
 ```
 
 A successful `auth` means the key is valid. If project-scoped commands still
-fail afterward, the project id is missing or the key lacks a scope.
+fail afterward, the project id is missing or the key lacks a scope. Run
+`framedash projects list` to find a valid project id.
 
 ## Output formats
 

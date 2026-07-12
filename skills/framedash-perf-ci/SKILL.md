@@ -73,8 +73,10 @@ What each part does:
   grow past its pre-run value. `--skip-wait` skips the wait (e.g. the SDK
   flushed synchronously).
 - Gate (runs only when `--baseline` is set): `--baseline <id>` is the known-good
-  build; `--metric frame_time|memory|gpu_time` restricts to one metric (default
-  all); `--threshold <pct>` tolerates a regression up to that percent (default
+  build; `--metric frame_time|memory|gpu_time|io.read_bytes|io.read_time_ms|io.read_ops|load_time_ms`
+  restricts to one metric (default all; the `io.*` disk metrics need disk-IO
+  tracking enabled in the SDK, and `load_time_ms` needs SDK map-load timing via
+  BeginMapLoad/EndMapLoad); `--threshold <pct>` tolerates a regression up to that percent (default
   0 = any worsening fails); `--fail-on-regression` exits 1 on a breach (requires
   `--baseline`); `--days 7|14|30|90` sets the comparison window (default 30);
   `--map` / `--platform` restrict the comparison.

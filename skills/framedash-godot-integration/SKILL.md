@@ -27,7 +27,7 @@ Clone the addon at a pinned release tag (substitute a newer tag as it ships) and
 copy it into your project:
 
 ```bash
-git clone --branch v0.1.3 --depth 1 https://github.com/crane-valley/framedash-godot-sdk.git
+git clone --branch v0.1.4 --depth 1 https://github.com/crane-valley/framedash-godot-sdk.git
 ```
 
 1. Copy `Runtime/`, `FramedashEditorPlugin.cs`, and `plugin.cfg` into

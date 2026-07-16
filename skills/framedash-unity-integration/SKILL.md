@@ -27,12 +27,12 @@ Add the package as a git dependency. For CI or scripted installs, edit
 ```json
 {
   "dependencies": {
-    "com.framedash.sdk": "https://github.com/crane-valley/framedash-unity-sdk.git#v0.1.3"
+    "com.framedash.sdk": "https://github.com/crane-valley/framedash-unity-sdk.git#v0.1.4"
   }
 }
 ```
 
-Pin a version tag (`#v0.1.3`) rather than tracking the default branch, so a CI
+Pin a version tag (`#v0.1.4`) rather than tracking the default branch, so a CI
 build is reproducible.
 
 If a batch-mode run fails right after adding the git package with

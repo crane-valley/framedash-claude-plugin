@@ -27,14 +27,13 @@ Clone the addon at a pinned release tag (substitute a newer tag as it ships) and
 copy it into your project:
 
 ```bash
-git clone --branch v0.1.5 --depth 1 https://github.com/crane-valley/framedash-godot-sdk.git
+git clone --branch v0.1.9 --depth 1 https://github.com/crane-valley/framedash-godot-sdk.git
 ```
 
-1. Copy `Runtime/`, `FramedashEditorPlugin.cs`, and `plugin.cfg` into
-   `res://addons/framedash/`. Do NOT copy `Tests/` (its NUnit deps break the game
-   build, since a Godot .NET project compiles every `.cs` under the project).
-2. Enable "Framedash Telemetry SDK" under Project Settings > Plugins.
-3. Run a C# build once so the autoload type is available.
+1. Copy the checked-out `addons/framedash/` directory into your project's
+   `res://addons/` directory, so it lands at `res://addons/framedash/`.
+2. Run a C# build once so the autoload type is available.
+3. Enable "Framedash Telemetry SDK" under Project Settings > Plugins.
 
 Require addon version 0.1.3 or newer (see the first-flush race below).
 

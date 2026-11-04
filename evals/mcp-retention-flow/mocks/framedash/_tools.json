@@ -1,0 +1,55 @@
+{
+	"tools": [
+		{
+			"name": "list_projects",
+			"description": "Show the project bound to the current API key.",
+			"inputSchema": {
+				"type": "object",
+				"properties": {}
+			}
+		},
+		{
+			"name": "get_retention",
+			"description": "Get player retention cohort analysis.",
+			"inputSchema": {
+				"type": "object",
+				"properties": {
+					"days": {
+						"description": "Time period: 7, 14, 30, or 90 days (default 30)",
+						"enum": [7, 14, 30, 90]
+					},
+					"project_id": {
+						"type": "string",
+						"description": "Override the default project ID",
+						"format": "uuid"
+					}
+				}
+			}
+		},
+		{
+			"name": "query",
+			"description": "Execute a read-only SQL query against the ClickHouse events table. Returns up to `limit` rows (default 100, max 1000).",
+			"inputSchema": {
+				"type": "object",
+				"properties": {
+					"sql": {
+						"type": "string",
+						"description": "SQL query to execute"
+					},
+					"limit": {
+						"type": "integer",
+						"minimum": 1,
+						"maximum": 1000,
+						"description": "Max rows to return (default 100)"
+					},
+					"project_id": {
+						"type": "string",
+						"description": "Override the default project ID",
+						"format": "uuid"
+					}
+				},
+				"required": ["sql"]
+			}
+		}
+	]
+}

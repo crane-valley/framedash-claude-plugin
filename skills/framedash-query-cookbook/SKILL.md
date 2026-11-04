@@ -154,16 +154,47 @@ FROM (
          min(toDate(timestamp)) AS first_day,
          groupUniqArray(toDate(timestamp)) AS active_days
   FROM events
-  WHERE timestamp >= today() - 30
+  WHERE player_id != ''
   GROUP BY player_id
 )
+WHERE first_day >= today() - 30
 GROUP BY first_day
 ORDER BY first_day
 ```
 
 The inner query yields one row per player, so `count()` in the outer query is
-the cohort size. Extend to day-N retention by checking
-`has(active_days, first_day + N)`.
+the cohort size.
+
+The 30-day window sits on `first_day` in the outer query, **not** on `timestamp`
+in the inner one. Bounding the scan would make `min(toDate(timestamp))` a
+player's first day *within the window* rather than their earliest retained day,
+so everyone who started before the window would be re-dated into a cohort they
+never belonged to and counted as newly acquired. The inner `player_id != ''`
+filter drops rows that carry no player id; left in, they aggregate into one
+synthetic player and distort the earliest cohort.
+
+This is the one recipe here that deliberately leaves `timestamp` unbounded, so
+the inner scan reads the project's full *retained* event history and it is the
+most expensive query in this cookbook. Narrowing the outer window trims the
+result, not the scan. On a large project the scan can also trip the read-only
+query caps (10 s execution, 100M rows read, 2 GB read) and error out.
+
+Raw `events` are purged oldest-first at your plan's retention floor (7 days on
+Free up to 365 on Enterprise), and this query only sees surviving events. That
+is a second, separate source of re-dating: the outer window stops the scan bound
+from re-dating in-window players, but a player whose original events have aged
+out is dated by their earliest surviving event, so a long-time player who
+returns today lands in today's cohort as a new acquisition. Once a project has
+history older than its floor, every raw-SQL cohort is therefore potentially
+inflated, not just the oldest one, and no raw query can correct it: production
+keeps first-seen dates in a durable table that the SQL validator does not
+expose. Prefer the `get_retention` MCP tool or the retention API for such
+projects and whenever the scan cost above matters. Their cohort dates are
+durable on the MV-backed path (the pre-backfill fallback scans raw events),
+but return visits are still counted from raw `events`, so cohorts older than the
+floor can read as 0% there too.
+
+Extend to day-N retention by checking `has(active_days, first_day + N)`.
 
 ### 7. Perf percentiles per build (`perf_heartbeat`)
 
@@ -226,6 +257,7 @@ LIMIT 20
 - Prefer `uniqExact(...)` for exact distinct counts on player/session ids; use
   `uniq(...)` for a faster approximate count on very large ranges.
 - Always bound `timestamp` so queries prune partitions (the table is partitioned
-  by day) and stay fast.
+  by day) and stay fast -- recipe 6 is the deliberate exception, where the bound
+  must go on the derived `first_day` instead.
 - For perf-oriented questions, filter `event_name = 'perf_heartbeat'` first; not
   every event carries `fps`/`frame_time_ms`.

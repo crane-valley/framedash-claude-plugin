@@ -63,9 +63,11 @@ A single key can carry multiple scopes; a read-only integration should stay on
 
 ## API-key handling (best practice)
 
-Key precedence is: `--api-key-file` (with `-` meaning stdin) > `--api-key` >
-`FRAMEDASH_API_KEY`. Prefer a file or piped stdin over `--api-key` so the raw
-key never lands in shell history or the process list.
+Key precedence is: `--api-key` > `--api-key-file` (with `-` meaning stdin) >
+`FRAMEDASH_API_KEY` > OAuth tokens stored by `framedash login`. Prefer a file or
+piped stdin over `--api-key` so the raw key never lands in shell history or the
+process list. Because `--api-key` wins, passing it alongside a file silently
+overrides the file rather than acting as a fallback -- supply exactly one source.
 
 ```bash
 # From a file

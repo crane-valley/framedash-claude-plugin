@@ -102,6 +102,22 @@ framedash perf-diff \
 accepts the same `--metric`, `--threshold`, `--days`, `--map`, `--platform`, and
 `--fail-on-regression` flags as the gate in Recipe 1.
 
+## Interpret the comparison
+
+Use the analytics-read-only `builds` and `perf-diff` commands above when raw SQL
+is unavailable; do not request `data:admin` merely to compare builds. Report the
+build IDs, time window, map/platform filters, metric and units, and the number of
+samples and sessions for each side. P50 summarizes the selected build population,
+not necessarily the active episode: waiting or unrelated sessions can dominate
+it. A single session or a small sample does not establish statistical certainty.
+Treat null or missing metrics as unknown, not zero or a passing measurement.
+
+An HTTP 202 confirms acceptance, not durable storage or readiness for comparison.
+Use a unique run marker and verify it is queryable with an appropriately scoped
+key; check the expected build's fresh performance samples before comparing. If
+raw query is unavailable, report the remaining verification gap instead of
+assuming readiness from 202 alone.
+
 ## GitHub Actions example
 
 ```yaml

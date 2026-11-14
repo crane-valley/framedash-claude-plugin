@@ -17,14 +17,15 @@ through the MCP tools.
 
 ## Step 1 -- Check npx is available
 
-The MCP server runs via `npx -y @framedash/mcp-server`. Confirm `npx` is on the
+The MCP server requires Node.js 22 or later and runs via `npx -y @framedash/mcp-server`. Confirm Node.js and `npx` are on the
 user's PATH:
 
 ```bash
+node --version
 npx --version
 ```
 
-If this fails, tell the user to install Node.js (which provides `npx`) from
+If either check fails or Node.js is older than 22, tell the user to install Node.js 22 or later (which provides `npx`) from
 https://nodejs.org and re-run setup.
 
 ## Step 2 -- Confirm the API key is set (do not read its value)

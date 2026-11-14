@@ -3,7 +3,7 @@
 Analyze your game telemetry with Claude Code in a one-step setup. This plugin
 bundles:
 
-- The **Framedash MCP server** (`@framedash/mcp-server`) -- 12 read-only tools
+- The **Framedash MCP server** (`@framedash/mcp-server`) -- read-only tools
   and 4 resources for querying analytics (dashboard KPIs, retention, funnels,
   insights, heatmaps, maps, content, alerts, and raw SQL).
 - A **query cookbook** skill -- the events schema plus ready-to-run SQL for DAU,

@@ -15,12 +15,11 @@ Troubleshooting: https://docs.framedash.dev/en/sdk/troubleshooting/
 
 ## Requirements
 
-- Unreal Engine 5.3 or newer (build-verified through 5.7; the plugin sets no
-  `EngineVersion`, so newer engines compile too).
-- A C++ project. Blueprint-only projects cannot compile the source plugin.
+- Unreal Engine 5.3 or newer. Precompiled packages are available for UE 5.3 through 5.8 on Win64; choose the package matching the engine and platform.
+- A C++ project and toolchain for source builds. Blueprint-only projects can use a compatible precompiled package.
 - An ingest API key with the `events:write` scope.
 
-## Install (three steps, all required)
+## Install
 
 1. Put the plugin at `Plugins/Framedash` so `Plugins/Framedash/Framedash.uplugin`
    exists. The release zip ALREADY contains a top-level `Framedash/` folder, so
@@ -34,7 +33,7 @@ Troubleshooting: https://docs.framedash.dev/en/sdk/troubleshooting/
 { "Plugins": [ { "Name": "Framedash", "Enabled": true } ] }
 ```
 
-3. Add the module dependency in your `Build.cs`:
+3. For C++ callers, add the module dependency in your `Build.cs`:
 
 ```csharp
 PrivateDependencyModuleNames.Add("Framedash");
@@ -42,15 +41,15 @@ PrivateDependencyModuleNames.Add("Framedash");
 
 Skipping step 3 is the most common failure: `#include "FramedashSubsystem.h"`
 fails to compile. Enabling the plugin in the `.uproject` alone is not enough.
-Rebuild after all three steps.
+Rebuild source projects after all three steps. Blueprint-only projects using a matching precompiled package enable the plugin and do not need step 3 or a C++ rebuild.
 
 ## Configure and initialize
 
-Auto-initialize from `Config/DefaultGame.ini`:
+For an editor-local test, auto-initialize from a private, untracked `Saved/Config/WindowsEditor/Game.ini` (keep real keys out of tracked files):
 
 ```ini
 [/Script/Framedash.FramedashSettings]
-ApiKey=your-api-key
+ApiKey=<your-ingest-key>
 bAutoInitialize=True
 BuildId=1.0.0
 SamplingRate=1.0
@@ -81,6 +80,8 @@ if (UGameInstance* GI = GetGameInstance())
 - Do not commit a live key in `DefaultGame.ini`. Exclude the file from version
   control or source the key from `FRAMEDASH_API_KEY` in the C++ path.
 - Never echo the key to a log. If one was committed, scrub history and rotate it.
+
+For the editor Heatmap read key and project ID, use **Editor Preferences > Plugins > Framedash Heatmap**. The read key may instead come from `FRAMEDASH_ANALYTICS_API_KEY` when the field is empty. This is separate from the ingest key.
 
 ## Send events
 
